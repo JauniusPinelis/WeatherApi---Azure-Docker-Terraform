@@ -22,3 +22,26 @@ stages:
         repository: 'jauniuspinelis1/weatherapi'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
+- stage: Provision
+  displayName: 'Terraforming on azure'
+  dependsOn: 
+  jobs: 
+    - job : Provision
+    displayName: 'Provisioning Container instance'
+    pool: 
+      vmimage: 'ubuntu-latest'
+    variables: 
+    - group: TerraformEnvVars
+    steps: 
+    - scripts: 
+        set -e
+
+        terraform init -input=false
+        terraform apply -input=false -auto-approve
+      name: 'RunTerraform'
+      displayName: 'Run Terraform'
+      env: 
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
