@@ -24,7 +24,7 @@ stages:
         Dockerfile: '**/Dockerfile'
 - stage: Provision
   displayName: 'Terraforming on azure'
-  dependsOn: 
+  dependsOn: Build
   jobs: 
   - job : Provision
     displayName: 'Provisioning Container instance'
